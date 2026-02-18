@@ -224,6 +224,42 @@
             margin-bottom: 2rem;
             opacity: 0;
             animation: fadeInUp 1s ease-out 0.3s forwards;
+            font-family: 'Courier New', monospace;
+            position: relative;
+        }
+
+        /* Typing effect for subtitle */
+        .typing-effect {
+            overflow: hidden;
+            border-right: 3px solid var(--accent-color);
+            white-space: nowrap;
+            animation: typing 3s steps(40, end) 1s forwards, blink-caret 0.75s step-end infinite;
+            width: 0;
+            display: inline-block;
+        }
+
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent; }
+            50% { border-color: var(--accent-color); }
+        }
+
+        /* Code-style highlight */
+        .code-highlight {
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        .code-bracket {
+            color: #00ffff;
+        }
+
+        .code-tag {
+            color: #ff79c6;
         }
 
         .hero-content .description {
@@ -640,8 +676,8 @@
 
         .attachment-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 1rem;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
         }
 
         .attachment-item {
@@ -654,8 +690,17 @@
 
         .attachment-item img {
             max-width: 100%;
+            width: 100%;
+            height: auto;
+            min-height: 250px;
+            object-fit: cover;
             border-radius: 5px;
             margin-bottom: 0.5rem;
+        }
+
+        /* Full width images for diagrams */
+        .attachment-item[style*="grid-column"] img {
+            min-height: 400px;
         }
 
         @keyframes fadeIn {
@@ -1013,7 +1058,9 @@
         <div class="floating-badge">Python & JS</div>
         <div class="hero-content">
             <h1>Hi, I'm Audwin</h1>
-            <p class="subtitle">Full Stack Developer & Creative Designer</p>
+            <p class="subtitle">
+                <span class="typing-effect" id="typed-text"></span>
+            </p>
             <p class="description">
                 I build exceptional digital experiences that combine beautiful design 
                 with powerful functionality. Let's create something amazing together.
@@ -1178,8 +1225,8 @@
                         <p>Join club membership form</p>
                     </div>
                     <div class="attachment-item">
-                        <img src="images/cca-contact.png" alt="Contact Form" onerror="this.parentElement.innerHTML='<p>📸 Contact Form Screenshot</p>'">
-                        <p>Enquiry/contact form</p>
+                        <img src="images/cca-aboutus.png" alt="About Us Page" onerror="this.parentElement.innerHTML='<p>📸 About Us Page Screenshot</p>'">
+                        <p>About Us page</p>
                     </div>
                 </div>
             </div>
@@ -1473,7 +1520,30 @@
             setTimeout(() => {
                 document.querySelector('.loading-screen').classList.add('hidden');
             }, 1000);
+
+            // Start typing effect
+            setTimeout(() => {
+                typeWriter();
+            }, 1500);
         });
+
+        // Typing effect for subtitle
+        const textToType = "Full Stack Developer & Creative Designer";
+        let charIndex = 0;
+        
+        function typeWriter() {
+            const typedElement = document.getElementById('typed-text');
+            if (charIndex < textToType.length) {
+                typedElement.textContent += textToType.charAt(charIndex);
+                charIndex++;
+                setTimeout(typeWriter, 80); // Speed of typing
+            } else {
+                // Remove cursor after typing is done
+                setTimeout(() => {
+                    typedElement.style.borderRight = 'none';
+                }, 500);
+            }
+        }
 
         // Scroll progress bar
         window.addEventListener('scroll', () => {
